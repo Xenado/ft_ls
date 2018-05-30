@@ -39,7 +39,7 @@ int		ft_display_ls(t_dir *dir, char opts[NB_OPTS + 1], int d_name)
 	if(d_name)
 	{
 		ft_putstr(dir->path);
-		ft_putendl(":");
+		ft_putendl(":\n");
 	}
 	ft_organize(&(dir->files), opts, (dir->path));
 	ft_display_dir(&dir, opts);

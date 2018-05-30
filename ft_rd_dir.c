@@ -39,11 +39,8 @@ t_files		*ft_rd_dir(char *dir_name)
 	path = ft_strdup(dir_name);
 	dirp = opendir(dir_name);
 	dp = readdir(dirp);
-	ft_putendl("path");
 	ft_add_path(&path, dp->d_name, dir_name);
-	ft_putendl("hop");
 	*begin = ft_new_file(dp->d_name, path);
-	ft_putendl("file");
 	file = *begin;
 	while ((dp = readdir(dirp)))
 	{

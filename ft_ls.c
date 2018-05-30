@@ -23,8 +23,7 @@ static int		ft_check_files(t_files **files, char opts[NB_OPTS + 1])
 		return (-1);
 	while (tmp)
 	{
-		if (tmp->type == 'd' && ((ft_strchr(opts, 'a') && tmp->name[0] == '.')
-			|| tmp->name[0] != '.'))
+		if (tmp->type == 'd')
 			nb_dir += 1;
 		tmp = tmp->next;
 	}

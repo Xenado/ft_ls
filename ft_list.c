@@ -42,22 +42,17 @@ t_files		*ft_new_file(char *file_name, char *path)
 	ft_strcpy(file->name, file_name);
 	if (!(file->stat = (struct stat *)malloc(sizeof(struct stat))))
 		return (NULL);
-	ft_putendl("lstat");
 	if ((lstat(path, file->stat)) == -1)
 	{
 		file->error = ft_strdup(strerror(errno));
 		file->type = '\0';
 	}
 	else
-	{
-		ft_putendl("else");		
+	{	
 		file->error = NULL;
 		file->type = ft_check_type(file->stat->st_mode);
-		ft_putendl("victoire");
 	}
-	ft_putendl("next");
 	file->next = NULL;
-	ft_putendl("youhou");
 	return (file);
 }
 
@@ -72,9 +67,7 @@ t_dir		*ft_new_dir(char *dir_name, char *path)
 	ft_strcpy(dir->name, dir_name);
 	if (ft_strcmp(dir_name, path))
 		ft_add_path(&tmp, dir_name, path);
-	ft_putendl("ntm");
 	dir->files = ft_rd_dir(tmp);
-	ft_putendl("pd");
 	dir->path = ft_strdup(tmp);
 	free(tmp);
 	dir->next = NULL;

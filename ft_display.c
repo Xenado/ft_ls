@@ -14,7 +14,6 @@
 
 void		ft_organize(t_files **files, char opt[NB_OPTS + 1], char *path)
 {
-	ft_putendl("organize");
 	ft_sort_error(files);
 	ft_sort_ascii(files, path);
 	if (ft_strchr(opt, 't'))
