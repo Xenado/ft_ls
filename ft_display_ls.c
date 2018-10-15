@@ -39,9 +39,9 @@ int		ft_display_ls(t_dir *dir, char opts[NB_OPTS + 1], int d_name)
 	if(d_name)
 	{
 		ft_putstr(dir->path);
-		ft_putendl(":\n");
+		ft_putendl(":");
 	}
-	ft_organize(&(dir->files), opts, (dir->path));
+	ft_organize(&(dir->files), opts, (dir->path), 0);
 	ft_display_dir(&dir, opts);
 	if (ft_strchr(opts, 'R'))
 		while (nb_dir)
@@ -49,8 +49,10 @@ int		ft_display_ls(t_dir *dir, char opts[NB_OPTS + 1], int d_name)
 			if (tmp->type == 'd' && ((ft_strchr(opts, 'a') &&
 				tmp->name[0] == '.') || tmp->name[0] != '.'))
 			{
+				ft_putchar('\n');
 				nb_dir -= 1;
 				dir->next = ft_new_dir(tmp->name, dir->path);
+				ft_putendl("-------------------ft_new_dir-------------------");
 				if (ft_display_ls(dir->next, opts, 1))
 					return (nb_dir);
 			}

@@ -63,20 +63,23 @@ static void		display_all(t_files **files, char opts[NB_OPTS + 1], int nb_dir)
 	if (nb_dir == -1)
 	{
 		dir = ft_new_dir(".", ".");
-		ft_organize(&(dir->files), opts, ".");
+		ft_organize(&(dir->files), opts, ".", 0);
 		ft_display_ls(dir, opts, 0);
 	}
 	else
-		while (nb_dir)
+	{
+		ft_organize(&tmp, opts, "", 1);
+		while (nb_dir && tmp)
 		{
-			if (tmp->type == 'd' && ((ft_strchr(opts, 'a') &&
-				tmp->name[0] == '.') || tmp->name[0] != '.'))
+			if (tmp->type == 'd')
 			{
-				dir = ft_new_dir((*files)->name, ".");
+				dir = ft_new_dir(tmp->name, tmp->name);
 				ft_display_ls(dir, opts, file_name);
 				nb_dir--;
 			}
+			tmp = tmp->next;
 		}
+	}
 }
 
 int			main(int ac, char **av)

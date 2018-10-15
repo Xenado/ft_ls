@@ -21,12 +21,12 @@ void			ft_swap_data(t_files **files, char *path)
 
 	tmp = *files;
 	tmp_path = NULL;
-	if (ft_strcmp(path, "."))
+	if (ft_strcmp(path, ".") && ft_strcmp(path, tmp->name))
 		ft_add_path(&tmp_path, tmp->name, path);
 	else
 		tmp_path = ft_strdup(tmp->name);
 	lstat(tmp_path, tmp->next->stat);
-	if (ft_strcmp(path, "."))
+	if (ft_strcmp(path, ".") && ft_strcmp(path, tmp->name))
 		ft_add_path(&tmp_path, tmp->next->name, path);
 	else
 		tmp_path = ft_strdup(tmp->next->name);
@@ -39,7 +39,7 @@ void			ft_swap_data(t_files **files, char *path)
 	tmp->next->type = type_tmp;
 }
 
-void			ft_sort_ascii(t_files **begin_file, char *path)
+void			ft_sort_ascii(t_files **begin_file, char *path, int arg)
 {
 	t_files		*tmp;
 	int			sort;
@@ -54,7 +54,10 @@ void			ft_sort_ascii(t_files **begin_file, char *path)
 			{
 				if (ft_strcmp(tmp->name, tmp->next->name) > 0 && !(tmp->error))
 				{
- 					ft_swap_data(&tmp, path);
+					if (arg)
+						ft_swap_data(&tmp, tmp->name);
+					else
+ 						ft_swap_data(&tmp, path);
 					sort = 1;
 				}
 				tmp = tmp->next;
@@ -62,7 +65,7 @@ void			ft_sort_ascii(t_files **begin_file, char *path)
 		}
 }
 
-void			ft_sort_by_time(t_files **begin_file, char *path)
+void			ft_sort_by_time(t_files **begin_file, char *path, int arg)
 {
 	t_files		*tmp;
 	int			sort;
@@ -79,7 +82,10 @@ void			ft_sort_by_time(t_files **begin_file, char *path)
 				if (tmp->stat->st_mtime < tmp->next->stat->st_mtime
 					&& !(tmp->error))
 				{
-					ft_swap_data(&tmp, path);
+					if (arg)
+						ft_swap_data(&tmp, tmp->name);
+					else
+ 						ft_swap_data(&tmp, path);
 					sort = 1;
 				}
 				tmp = tmp->next;
