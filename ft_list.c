@@ -74,12 +74,12 @@ t_dir		*ft_new_dir(char *dir_name, char *path)
 	return (dir);
 }
 
-void		free_files(t_files **file)
+void		free_files(t_files *file)
 {
 	t_files		*tmp;
 	t_files		*next;
 
-	tmp = *file;
+	tmp = file;
 	while (tmp)
 	{
 		next = tmp->next;
@@ -90,7 +90,7 @@ void		free_files(t_files **file)
 		free(tmp);
 		tmp = next;
 	}
-	*file = NULL;
+	file = NULL;
 }
 
 void		free_dir(t_dir **dir)
@@ -104,8 +104,10 @@ void		free_dir(t_dir **dir)
 		next = tmp->next;
 		if (tmp->files)
 		{
-			free_files(&(tmp->files));
+			free_files(tmp->files);
 		}
+		if (tmp->path)
+			free(tmp->path);
 		free(tmp);
 		tmp = next;
 	}

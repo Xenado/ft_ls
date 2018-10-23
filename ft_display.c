@@ -20,19 +20,17 @@ void		ft_organize(t_files **files, char opt[NB_OPTS + 1], char *path,
 	if (ft_strchr(opt, 't'))
 		ft_sort_by_time(files, path, arg);
 	if (ft_strchr(opt, 'r'))
-		ft_rev_files(files, ft_count_files(files), 
+		ft_rev_files(files, ft_count_files(files),
 					ft_count_error(files), path, arg);
 }
 
-int			ft_display_arg(t_files **files, char opts[NB_OPTS + 1])
+void		ft_display_arg(t_files **files, char opts[NB_OPTS + 1])
 {
 	t_files		*tmp;
-	int			nb_dir;
 	t_sizes		*sizes;
 
 	tmp = *files;
 	sizes = get_max_sizes(files);
-	nb_dir = 0;
 	while (tmp)
 	{
 		if (tmp->error)
@@ -42,15 +40,14 @@ int			ft_display_arg(t_files **files, char opts[NB_OPTS + 1])
 			ft_putstr_fd(": ", 2);
 			ft_putendl_fd(tmp->error, 2);
 		}
-		else if (tmp->type == 'd')
-			nb_dir++;
 		else if (ft_strchr(opts, 'l'))
 			ft_opt_l(tmp, tmp->name, sizes);
-		else
+		else if (tmp->type != 'd')
 			ft_putendl(tmp->name);
 		tmp = tmp->next;
 	}
-	return (nb_dir);
+	if (sizes)
+		free(sizes);
 }
 
 int		ft_display_dir(t_dir **dir, char opts[NB_OPTS + 1])
@@ -87,6 +84,8 @@ int		ft_display_dir(t_dir **dir, char opts[NB_OPTS + 1])
 		}
 		tmp = tmp->next;
 	}
+	if (sizes)
+		free(sizes);
 	return (nb_dir);
 }
 
@@ -117,4 +116,5 @@ void		ft_display_time(t_files *file)
 	ft_putchar(' ');
 	ft_putstr(final_time);
 	ft_putchar(' ');
+	free(final_time);
 }

@@ -57,6 +57,7 @@ int		ft_display_ls(t_dir *dir, char opts[NB_OPTS + 1], int d_name)
 				dir->next = ft_new_dir(tmp->name, dir->path);
 				if (ft_display_ls(dir->next, opts, 1))
 					return (nb_dir);
+				free_dir(&(dir->next));
 			}
 			tmp = tmp->next;
 		}

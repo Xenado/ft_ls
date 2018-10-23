@@ -37,6 +37,8 @@ void			ft_swap_data(t_files **files, char *path)
 	type_tmp = tmp->type;
 	tmp->type = tmp->next->type;
 	tmp->next->type = type_tmp;
+	if (tmp_path)
+		free(tmp_path);
 }
 
 void			ft_sort_ascii(t_files **begin_file, char *path, int arg)

@@ -59,7 +59,6 @@ static void		display_all(t_files **files, char opts[NB_OPTS + 1], int nb_dir)
 	tmp = *files;
 	nb_args = count_args(files);
 	file_name = nb_args > 1 ? 1 : 0;
-	ft_display_arg(files, opts);
 	if (nb_dir == -1)
 	{
 		dir = ft_new_dir(".", ".");
@@ -68,18 +67,22 @@ static void		display_all(t_files **files, char opts[NB_OPTS + 1], int nb_dir)
 	}
 	else
 	{
-		ft_organize(&tmp, opts, "", 1);
+		ft_organize(files, opts, "", 1);
+		ft_display_arg(files, opts);
 		while (nb_dir && tmp)
 		{
 			if (tmp->type == 'd')
 			{
 				dir = ft_new_dir(tmp->name, tmp->name);
 				ft_display_ls(dir, opts, file_name);
+				free_dir(&dir);
 				nb_dir--;
 			}
 			tmp = tmp->next;
 		}
 	}
+	if (dir)
+		free_dir(&dir);
 }
 
 int			main(int ac, char **av)
@@ -88,8 +91,7 @@ int			main(int ac, char **av)
 	char	opts[NB_OPTS + 1];
 	int		illegal_opt;
 	t_files	*file;
-	t_files	**first_file;
-	t_dir	*dir;
+	t_files	*first_file;
 
 	i = 0;
 	illegal_opt = 0;
@@ -99,17 +101,17 @@ int			main(int ac, char **av)
 			ft_illegal_opt(av[i]);
 	if (illegal_opt)
 		exit(0);
-	if (!(first_file = (t_files **)malloc(sizeof(t_files *))))
-		exit(0);
-	*first_file = NULL;
+	first_file = NULL;
 	if (i < ac)
-		*first_file = ft_new_file(av[i], av[i]);
-	file = *first_file;
+		first_file = ft_new_file(av[i], av[i]);
+	file = first_file;
 	while (++i < ac)
 	{
 		file->next = ft_new_file(av[i], av[i]);
 		file = file->next;
 	}
-	display_all(first_file, opts, ft_check_files(first_file, opts));
+	display_all(&first_file, opts, ft_check_files(&first_file, opts));
+	free_files(first_file);
+	while(1);
 	return (0);
 }

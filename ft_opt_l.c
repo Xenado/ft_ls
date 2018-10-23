@@ -90,6 +90,7 @@ void			ft_opt_l(t_files *file, char *path, t_sizes *sizes_max)
 		ft_putstr(" -> ");
 		ft_putendl(buf);
 	}
+	free(sizes);
 }
 
 struct passwd	*ft_get_uid(t_files *file)

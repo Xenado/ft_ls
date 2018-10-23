@@ -28,20 +28,18 @@ void		ft_add_path(char **path, char *file_name, char *dir_name)
 
 t_files		*ft_rd_dir(char *dir_name)
 {
-	t_files			**begin;
+	t_files			*begin;
 	t_files			*file;
 	DIR				*dirp;
 	struct dirent	*dp;
 	char			*path;
 
-	if (!(begin = (t_files **)malloc(sizeof(t_files *))))
-		return (NULL);
 	path = ft_strdup(dir_name);
 	dirp = opendir(dir_name);
 	dp = readdir(dirp);
 	ft_add_path(&path, dp->d_name, dir_name);
-	*begin = ft_new_file(dp->d_name, path);
-	file = *begin;
+	begin = ft_new_file(dp->d_name, path);
+	file = begin;
 	while ((dp = readdir(dirp)))
 	{
 		ft_add_path(&path, dp->d_name, dir_name);
@@ -51,5 +49,5 @@ t_files		*ft_rd_dir(char *dir_name)
 	if (path)
 		free(path);
 	(void)closedir(dirp);
-	return (*begin);
+	return (begin);
 }
