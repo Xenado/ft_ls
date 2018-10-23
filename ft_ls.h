@@ -78,7 +78,7 @@ void				ft_sort_error(t_files **files);
 int					ft_count_error(t_files **begin_file);
 int					ft_count_files(t_files **files);
 void				ft_rev_files(t_files **begin_file, int nb_files, int nb_error, 
-								char *path);
+								char *path, int arg);
 
 void				ft_organize(t_files **files, char opt[NB_OPTS + 1], char *path, int arg);
 int					ft_display_arg(t_files **files, char opts[NB_OPTS + 1]);

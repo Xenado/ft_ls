@@ -43,7 +43,7 @@ int			ft_count_files(t_files **files)
 }
 
 void		ft_rev_files(t_files **begin_file, int nb_files, int nb_error, 
-						char *path)
+						char *path, int arg)
 {
 	int			i;
 	int			i2;
@@ -60,7 +60,10 @@ void		ft_rev_files(t_files **begin_file, int nb_files, int nb_error,
 		i2 = 0;
 		while (i2 < nb_files - i)
 		{
-			ft_swap_data(&tmp, path);
+			if (arg)
+				ft_swap_data(&tmp, tmp->name);
+			else
+ 				ft_swap_data(&tmp, path);
 			tmp = tmp->next;
 			i2++;
 		}

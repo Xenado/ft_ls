@@ -21,7 +21,7 @@ void		ft_organize(t_files **files, char opt[NB_OPTS + 1], char *path,
 		ft_sort_by_time(files, path, arg);
 	if (ft_strchr(opt, 'r'))
 		ft_rev_files(files, ft_count_files(files), 
-					ft_count_error(files), path);
+					ft_count_error(files), path, arg);
 }
 
 int			ft_display_arg(t_files **files, char opts[NB_OPTS + 1])
@@ -66,7 +66,7 @@ int		ft_display_dir(t_dir **dir, char opts[NB_OPTS + 1])
 	tmp_path = ft_strdup(tmp_dir->path);
 	tmp = tmp_dir->files;
 	sizes = get_max_sizes(&tmp);
-	if (ft_strchr(opts, 'l'))
+	if (ft_strchr(opts, 'l') && ft_nblocks(&tmp, opts))
 	{
 		ft_putstr("total ");
 		ft_putnbr(ft_nblocks(&tmp, opts));

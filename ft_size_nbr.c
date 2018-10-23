@@ -37,9 +37,12 @@ int		ft_nlink_max(t_files **files)
 	size_max = 0;
 	while (file)
 	{
-		size_nbr = size_int((int)file->stat->st_nlink);
-		if (size_nbr > size_max)
-			size_max = size_nbr;
+		if (!file->error)
+		{
+			size_nbr = size_int((int)file->stat->st_nlink);
+			if (size_nbr > size_max)
+				size_max = size_nbr;
+		}
 		file = file->next;
 	}
 	return (size_max);
@@ -55,7 +58,8 @@ int		ft_size_max(t_files **files)
 	size_max = 0;
 	while (file)
 	{
-		if (file->type != 'c' && file->type != 'b' && file->type != 's')
+		if (!file->error && file->type != 'c' && file->type != 'b' &&
+			file->type != 's')
 		{
 			size_nbr = size_int((int)file->stat->st_size);
 			if (size_nbr > size_max)
@@ -76,7 +80,8 @@ int		ft_size_max_maj(t_files **files)
 	size_max = 0;
 	while (file)
 	{
-		if (file->type == 'c' || file->type == 'b' || file->type == 's')
+		if (!file->error && (file->type == 'c' || file->type == 'b' ||
+			file->type == 's'))
 		{
 			size_major = size_int((int)major(file->stat->st_rdev));
 			if (size_major > size_max)
@@ -97,7 +102,8 @@ int		ft_size_max_min(t_files **files)
 	size_max = 0;
 	while (file)
 	{
-		if (file->type == 'c' || file->type == 'b' || file->type == 's')
+		if (!file->error && (file->type == 'c' || file->type == 'b' ||
+			file->type == 's'))
 		{
 			size_minor = size_int((int)major(file->stat->st_rdev));
 			if (size_minor > size_max)

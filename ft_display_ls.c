@@ -21,8 +21,9 @@ int 	ft_check_dir(t_dir *dir, char opts[NB_OPTS + 1])
 	tmp = dir->files;
 	while (tmp)
 	{
-		if (tmp->type == 'd' && ((ft_strchr(opts, 'a') && tmp->name[0] == '.')
-			|| tmp->name[0] != '.'))
+		if (tmp->type == 'd' && ft_strcmp(tmp->name, ".") && 
+			ft_strcmp(tmp->name, "..") && ((ft_strchr(opts, 'a') &&
+			tmp->name[0] == '.') || tmp->name[0] != '.'))
 			nb_dir += 1;
 		tmp = tmp->next;
 	}
@@ -35,28 +36,30 @@ int		ft_display_ls(t_dir *dir, char opts[NB_OPTS + 1], int d_name)
 	t_files	*tmp;
 
 	tmp = dir->files;
-	nb_dir = ft_check_dir(dir, opts);
 	if(d_name)
 	{
 		ft_putstr(dir->path);
 		ft_putendl(":");
 	}
 	ft_organize(&(dir->files), opts, (dir->path), 0);
+	nb_dir = ft_check_dir(dir, opts);
 	ft_display_dir(&dir, opts);
 	if (ft_strchr(opts, 'R'))
-		while (nb_dir)
+	{
+		while (nb_dir && tmp)
 		{
-			if (tmp->type == 'd' && ((ft_strchr(opts, 'a') &&
+			if (tmp->type == 'd' && ft_strcmp(tmp->name, ".") && 
+				ft_strcmp(tmp->name, "..") && ((ft_strchr(opts, 'a') &&
 				tmp->name[0] == '.') || tmp->name[0] != '.'))
 			{
 				ft_putchar('\n');
 				nb_dir -= 1;
 				dir->next = ft_new_dir(tmp->name, dir->path);
-				ft_putendl("-------------------ft_new_dir-------------------");
 				if (ft_display_ls(dir->next, opts, 1))
 					return (nb_dir);
 			}
 			tmp = tmp->next;
 		}
+	}
 	return (0);
 }

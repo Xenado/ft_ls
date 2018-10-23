@@ -23,10 +23,13 @@ int		get_size_uid(t_files **files)
 	size_max = 0;
 	while (file)
 	{
-		pwd = ft_get_uid(file);
-		size = ft_strlen(pwd->pw_name);
-		if (size > size_max)
-			size_max = size;
+		if (!file->error)
+		{
+			pwd = ft_get_uid(file);
+			size = ft_strlen(pwd->pw_name);
+			if (size > size_max)
+				size_max = size;
+		}
 		file = file->next;
 	}
 	return (size_max);
@@ -43,10 +46,13 @@ int		get_size_gid(t_files **files)
 	size_max = 0;
 	while (file)
 	{
-		grp = ft_get_gid(file);
-		size = ft_strlen(grp->gr_name);
-		if (size > size_max)
-			size_max = size;
+		if (!file->error)
+		{
+			grp = ft_get_gid(file);
+			size = ft_strlen(grp->gr_name);
+			if (size > size_max)
+				size_max = size;
+		}
 		file = file->next;
 	}
 	return (size_max);
