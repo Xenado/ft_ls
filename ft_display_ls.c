@@ -50,7 +50,7 @@ int				ft_display_ls(t_dir *dir, char opts[NB_OPTS + 1], int d_name)
 	nb_dir = ft_check_dir(dir, opts);
 	ft_display_dir(&dir, opts);
 	if (ft_strchr(opts, 'R'))
-		while (nb_dir && tmp)
+		while (nb_dir > 0 && tmp)
 		{
 			if (tmp->type == 'd' && ft_strcmp(tmp->name, ".") &&
 				ft_strcmp(tmp->name, "..") && ((ft_strchr(opts, 'a') &&

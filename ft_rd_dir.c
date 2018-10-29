@@ -55,6 +55,7 @@ t_files			*ft_rd_dir(char *dir_name)
 
 	path = ft_strdup(dir_name);
 	dirp = opendir(dir_name);
+	file = NULL;
 	if (dirp)
 		file = rd_dir(dirp, &path, dir_name);
 	else
