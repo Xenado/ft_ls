@@ -48,7 +48,7 @@ t_files		*ft_new_file(char *file_name, char *path)
 		file->type = '\0';
 	}
 	else
-	{	
+	{
 		file->error = NULL;
 		file->type = ft_check_type(file->stat->st_mode);
 	}
@@ -83,8 +83,7 @@ void		free_files(t_files *file)
 	while (tmp)
 	{
 		next = tmp->next;
-		if (tmp->stat)
-			free(tmp->stat);
+		free(tmp->stat);
 		if (tmp->error)
 			free(tmp->error);
 		free(tmp);
@@ -103,9 +102,7 @@ void		free_dir(t_dir **dir)
 	{
 		next = tmp->next;
 		if (tmp->files)
-		{
 			free_files(tmp->files);
-		}
 		if (tmp->path)
 			free(tmp->path);
 		free(tmp);

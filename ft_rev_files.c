@@ -12,6 +12,18 @@
 
 #include "ft_ls.h"
 
+void		ft_organize(t_files **files, char opt[NB_OPTS + 1], char *path,
+						int arg)
+{
+	ft_sort_error(files);
+	ft_sort_ascii(files, path, arg);
+	if (ft_strchr(opt, 't'))
+		ft_sort_by_time(files, path, arg);
+	if (ft_strchr(opt, 'r'))
+		ft_rev_files(files, ft_count_files(files),
+					ft_count_error(files), path, arg);
+}
+
 int			ft_count_error(t_files **begin_file)
 {
 	t_files		*tmp;

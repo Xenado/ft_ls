@@ -29,7 +29,10 @@ void			ft_swap_data(t_files **files, char *path)
 	if (ft_strcmp(path, ".") && ft_strcmp(path, tmp->name))
 		ft_add_path(&tmp_path, tmp->next->name, path);
 	else
+	{
+		free(tmp_path);
 		tmp_path = ft_strdup(tmp->next->name);
+	}
 	lstat(tmp_path, tmp->stat);
 	ft_strcpy(name_tmp, tmp->name);
 	ft_strcpy(tmp->name, tmp->next->name);
@@ -37,8 +40,7 @@ void			ft_swap_data(t_files **files, char *path)
 	type_tmp = tmp->type;
 	tmp->type = tmp->next->type;
 	tmp->next->type = type_tmp;
-	if (tmp_path)
-		free(tmp_path);
+	free(tmp_path);
 }
 
 void			ft_sort_ascii(t_files **begin_file, char *path, int arg)

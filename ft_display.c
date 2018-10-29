@@ -12,16 +12,30 @@
 
 #include "ft_ls.h"
 
-void		ft_organize(t_files **files, char opt[NB_OPTS + 1], char *path,
-						int arg)
+static int	ft_display_files(t_dir *dir, char **path,
+								char opts[NB_OPTS + 1], t_sizes *sizes)
 {
-	ft_sort_error(files);
-	ft_sort_ascii(files, path, arg);
-	if (ft_strchr(opt, 't'))
-		ft_sort_by_time(files, path, arg);
-	if (ft_strchr(opt, 'r'))
-		ft_rev_files(files, ft_count_files(files),
-					ft_count_error(files), path, arg);
+	int			nb_dir;
+	t_files		*tmp;
+
+	nb_dir = 0;
+	tmp = dir->files;
+	while (tmp)
+	{
+		ft_add_path(path, tmp->name, dir->path);
+		if ((ft_strchr(opts, 'a') && tmp->name[0] == '.') ||
+			tmp->name[0] != '.')
+		{
+			if (tmp->type == 'd')
+				nb_dir++;
+			if (ft_strchr(opts, 'l'))
+				ft_opt_l(tmp, *path, sizes);
+			else
+				ft_putendl(tmp->name);
+		}
+		tmp = tmp->next;
+	}
+	return (nb_dir);
 }
 
 void		ft_display_arg(t_files **files, char opts[NB_OPTS + 1])
@@ -46,11 +60,12 @@ void		ft_display_arg(t_files **files, char opts[NB_OPTS + 1])
 			ft_putendl(tmp->name);
 		tmp = tmp->next;
 	}
+	ft_putchar('\n');
 	if (sizes)
 		free(sizes);
 }
 
-int		ft_display_dir(t_dir **dir, char opts[NB_OPTS + 1])
+int			ft_display_dir(t_dir **dir, char opts[NB_OPTS + 1])
 {
 	int		nb_dir;
 	char	*tmp_path;
@@ -58,7 +73,6 @@ int		ft_display_dir(t_dir **dir, char opts[NB_OPTS + 1])
 	t_sizes	*sizes;
 	t_files *tmp;
 
-	nb_dir = 0;
 	tmp_dir = *dir;
 	tmp_path = ft_strdup(tmp_dir->path);
 	tmp = tmp_dir->files;
@@ -69,21 +83,8 @@ int		ft_display_dir(t_dir **dir, char opts[NB_OPTS + 1])
 		ft_putnbr(ft_nblocks(&tmp, opts));
 		ft_putchar('\n');
 	}
-	while (tmp)
-	{
-		ft_add_path(&tmp_path, tmp->name, (*dir)->path);
-		if ((ft_strchr(opts, 'a') && tmp->name[0] == '.') ||
-			tmp->name[0] != '.')
-		{
-			if (tmp->type == 'd')
-				nb_dir++;
-			if (ft_strchr(opts, 'l'))
-				ft_opt_l(tmp, tmp_path, sizes);
-			else
-				ft_putendl(tmp->name);
-		}
-		tmp = tmp->next;
-	}
+	nb_dir = ft_display_files(tmp_dir, &tmp_path, opts, sizes);
+	free(tmp_path);
 	if (sizes)
 		free(sizes);
 	return (nb_dir);

@@ -36,15 +36,26 @@ t_files		*ft_rd_dir(char *dir_name)
 
 	path = ft_strdup(dir_name);
 	dirp = opendir(dir_name);
-	dp = readdir(dirp);
-	ft_add_path(&path, dp->d_name, dir_name);
-	begin = ft_new_file(dp->d_name, path);
-	file = begin;
-	while ((dp = readdir(dirp)))
+	if (dirp)
 	{
+		dp = readdir(dirp);
 		ft_add_path(&path, dp->d_name, dir_name);
-		file->next = ft_new_file(dp->d_name, path);
-		file = file->next;
+		begin = ft_new_file(dp->d_name, path);
+		file = begin;
+		while ((dp = readdir(dirp)))
+		{
+			ft_add_path(&path, dp->d_name, dir_name);
+			file->next = ft_new_file(dp->d_name, path);
+			file = file->next;
+		}
+	}
+	else
+	{
+		ft_putstr_fd("ft_ls: ", 2);
+		ft_putstr_fd(dir_name, 2);
+		ft_putstr_fd(": ", 2);
+		ft_putendl_fd(strerror(errno), 2);
+		exit(1);
 	}
 	if (path)
 		free(path);

@@ -75,12 +75,12 @@ void				ft_sort_ascii(t_files **begin_file, char *path, int arg);
 void				ft_sort_by_time(t_files **begin_file, char *path, int arg);
 void				ft_sort_error(t_files **files);
 
+void				ft_organize(t_files **files, char opt[NB_OPTS + 1], char *path, int arg);
 int					ft_count_error(t_files **begin_file);
 int					ft_count_files(t_files **files);
 void				ft_rev_files(t_files **begin_file, int nb_files, int nb_error, 
 								char *path, int arg);
 
-void				ft_organize(t_files **files, char opt[NB_OPTS + 1], char *path, int arg);
 void				ft_display_arg(t_files **files, char opts[NB_OPTS + 1]);
 int					ft_display_dir(t_dir **dir, char opts[NB_OPTS + 1]);
 void				ft_putnchar(char c, int n);

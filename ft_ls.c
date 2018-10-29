@@ -100,7 +100,7 @@ int			main(int ac, char **av)
 		if ((illegal_opt = ft_check_opts(av[i], opts)))
 			ft_illegal_opt(av[i]);
 	if (illegal_opt)
-		exit(0);
+		exit(1);
 	first_file = NULL;
 	if (i < ac)
 		first_file = ft_new_file(av[i], av[i]);
@@ -112,6 +112,5 @@ int			main(int ac, char **av)
 	}
 	display_all(&first_file, opts, ft_check_files(&first_file, opts));
 	free_files(first_file);
-	while(1);
 	return (0);
 }
