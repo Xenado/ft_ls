@@ -34,7 +34,9 @@ static int		count_args(t_files **args)
 {
 	t_files		*tmp;
 	int			nb_args;
+	int			nb_err;
 
+	nb_err = 0;
 	nb_args = 0;
 	if (args)
 	{
@@ -43,15 +45,19 @@ static int		count_args(t_files **args)
 		{
 			if (!tmp->error)
 				nb_args += 1;
+			else
+				nb_err += 1;
 			tmp = tmp->next;
 		}
 	}
+	if (!nb_args && nb_err)
+		return (-1);
 	return (nb_args);
 }
 
-static void		display_all(t_files **files, char opts[NB_OPTS + 1], int nb_dir)
+static void		display_dir(t_files **files, t_dir *dir, char opts[NB_OPTS + 1],
+								int nb_dir)
 {
-	t_dir	*dir;
 	t_files	*tmp;
 	int		nb_args;
 	int		file_name;
@@ -59,6 +65,27 @@ static void		display_all(t_files **files, char opts[NB_OPTS + 1], int nb_dir)
 	tmp = *files;
 	nb_args = count_args(files);
 	file_name = nb_args > 1 ? 1 : 0;
+	ft_organize(files, opts, "", 1);
+	nb_args != nb_dir ? ft_display_arg(files, opts, nb_dir) : 0;
+	while (nb_dir && tmp)
+	{
+		if (tmp->type == 'd')
+		{
+			dir = ft_new_dir(tmp->name, tmp->name);
+			if (dir->files)
+				ft_display_ls(dir, opts, file_name);
+			free_dir(&dir);
+			nb_dir--;
+		}
+		tmp = tmp->next;
+	}
+	dir ? free_dir(&dir) : 0;
+}
+
+static void		display_all(t_files **files, char opts[NB_OPTS + 1], int nb_dir)
+{
+	t_dir	*dir;
+
 	if (nb_dir == -1)
 	{
 		dir = ft_new_dir(".", ".");
@@ -66,27 +93,11 @@ static void		display_all(t_files **files, char opts[NB_OPTS + 1], int nb_dir)
 		ft_display_ls(dir, opts, 0);
 	}
 	else
-	{
-		ft_organize(files, opts, "", 1);
-		nb_args != nb_dir ? ft_display_arg(files, opts) : 0;
-		while (nb_dir && tmp)
-		{
-			if (tmp->type == 'd')
-			{
-				dir = ft_new_dir(tmp->name, tmp->name);
-				if (dir->files)
-					ft_display_ls(dir, opts, file_name);
-				free_dir(&dir);
-				nb_dir--;
-			}
-			tmp = tmp->next;
-		}
-	}
-	if (dir)
-		free_dir(&dir);
+		display_dir(files, dir, opts, nb_dir);
+	dir ? free_dir(&dir) : 0;
 }
 
-int			main(int ac, char **av)
+int				main(int ac, char **av)
 {
 	int		i;
 	char	opts[NB_OPTS + 1];
@@ -100,8 +111,7 @@ int			main(int ac, char **av)
 	while (++i < ac && av[i][0] == '-' && av[i][1] && ft_strcmp(av[i], "--"))
 		if ((illegal_opt = ft_check_opts(av[i], opts)))
 			ft_illegal_opt(av[i]);
-	if (illegal_opt)
-		exit(1);
+	illegal_opt ? exit(1) : 0;
 	first_file = NULL;
 	if (i < ac)
 		first_file = ft_new_file(av[i], av[i]);

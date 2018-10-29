@@ -14,32 +14,30 @@
 
 void			ft_swap_data(t_files **files, char *path)
 {
-	t_files			*tmp;
-	char			name_tmp[256];
+	char			name_tmp[SIZE_MAX_FILE];
 	char			type_tmp;
 	char			*tmp_path;
 
-	tmp = *files;
 	tmp_path = NULL;
-	if (ft_strcmp(path, ".") && ft_strcmp(path, tmp->name))
-		ft_add_path(&tmp_path, tmp->name, path);
+	if (ft_strcmp(path, ".") && ft_strcmp(path, (*files)->name))
+		ft_add_path(&tmp_path, (*files)->name, path);
 	else
-		tmp_path = ft_strdup(tmp->name);
-	lstat(tmp_path, tmp->next->stat);
-	if (ft_strcmp(path, ".") && ft_strcmp(path, tmp->name))
-		ft_add_path(&tmp_path, tmp->next->name, path);
+		tmp_path = ft_strdup((*files)->name);
+	lstat(tmp_path, (*files)->next->stat);
+	if (ft_strcmp(path, ".") && ft_strcmp(path, (*files)->name))
+		ft_add_path(&tmp_path, (*files)->next->name, path);
 	else
 	{
 		free(tmp_path);
-		tmp_path = ft_strdup(tmp->next->name);
+		tmp_path = ft_strdup((*files)->next->name);
 	}
-	lstat(tmp_path, tmp->stat);
-	ft_strcpy(name_tmp, tmp->name);
-	ft_strcpy(tmp->name, tmp->next->name);
-	ft_strcpy(tmp->next->name, name_tmp);
-	type_tmp = tmp->type;
-	tmp->type = tmp->next->type;
-	tmp->next->type = type_tmp;
+	lstat(tmp_path, (*files)->stat);
+	ft_strcpy(name_tmp, (*files)->name);
+	ft_strcpy((*files)->name, (*files)->next->name);
+	ft_strcpy((*files)->next->name, name_tmp);
+	type_tmp = (*files)->type;
+	(*files)->type = (*files)->next->type;
+	(*files)->next->type = type_tmp;
 	free(tmp_path);
 }
 
@@ -61,7 +59,7 @@ void			ft_sort_ascii(t_files **begin_file, char *path, int arg)
 					if (arg)
 						ft_swap_data(&tmp, tmp->name);
 					else
- 						ft_swap_data(&tmp, path);
+						ft_swap_data(&tmp, path);
 					sort = 1;
 				}
 				tmp = tmp->next;
@@ -89,7 +87,7 @@ void			ft_sort_by_time(t_files **begin_file, char *path, int arg)
 					if (arg)
 						ft_swap_data(&tmp, tmp->name);
 					else
- 						ft_swap_data(&tmp, path);
+						ft_swap_data(&tmp, path);
 					sort = 1;
 				}
 				tmp = tmp->next;

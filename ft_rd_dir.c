@@ -12,7 +12,28 @@
 
 #include "ft_ls.h"
 
-void		ft_add_path(char **path, char *file_name, char *dir_name)
+static t_files	*rd_dir(DIR *dirp, char **path, char *dir_name)
+{
+	t_files			*begin;
+	t_files			*file;
+	struct dirent	*dp;
+
+	begin = NULL;
+	dp = readdir(dirp);
+	ft_add_path(path, dp->d_name, dir_name);
+	begin = ft_new_file(dp->d_name, *path);
+	file = begin;
+	while ((dp = readdir(dirp)))
+	{
+		ft_add_path(path, dp->d_name, dir_name);
+		file->next = ft_new_file(dp->d_name, *path);
+		file = file->next;
+	}
+	(void)closedir(dirp);
+	return (begin);
+}
+
+void			ft_add_path(char **path, char *file_name, char *dir_name)
 {
 	char	*tmp;
 
@@ -26,31 +47,16 @@ void		ft_add_path(char **path, char *file_name, char *dir_name)
 	free(tmp);
 }
 
-t_files		*ft_rd_dir(char *dir_name)
+t_files			*ft_rd_dir(char *dir_name)
 {
-	t_files			*begin;
 	t_files			*file;
 	DIR				*dirp;
-	struct dirent	*dp;
 	char			*path;
 
-	begin = NULL;
 	path = ft_strdup(dir_name);
 	dirp = opendir(dir_name);
 	if (dirp)
-	{
-		dp = readdir(dirp);
-		ft_add_path(&path, dp->d_name, dir_name);
-		begin = ft_new_file(dp->d_name, path);
-		file = begin;
-		while ((dp = readdir(dirp)))
-		{
-			ft_add_path(&path, dp->d_name, dir_name);
-			file->next = ft_new_file(dp->d_name, path);
-			file = file->next;
-		}
-		(void)closedir(dirp);
-	}
+		file = rd_dir(dirp, &path, dir_name);
 	else
 	{
 		ft_putstr_fd("ft_ls: ", 2);
@@ -60,5 +66,21 @@ t_files		*ft_rd_dir(char *dir_name)
 	}
 	if (path)
 		free(path);
-	return (begin);
+	return (file);
+}
+
+struct passwd	*ft_get_uid(t_files *file)
+{
+	struct passwd	*bufpwd;
+
+	bufpwd = getpwuid(file->stat->st_uid);
+	return (bufpwd);
+}
+
+struct group	*ft_get_gid(t_files *file)
+{
+	struct group	*bufgrp;
+
+	bufgrp = getgrgid(file->stat->st_gid);
+	return (bufgrp);
 }

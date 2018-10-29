@@ -20,8 +20,7 @@ void		ft_organize(t_files **files, char opt[NB_OPTS + 1], char *path,
 	if (ft_strchr(opt, 't'))
 		ft_sort_by_time(files, path, arg);
 	if (ft_strchr(opt, 'r'))
-		ft_rev_files(files, ft_count_files(files),
-					ft_count_error(files), path, arg);
+		ft_rev_files(files, ft_count_error(files), path, arg);
 }
 
 int			ft_count_error(t_files **begin_file)
@@ -54,15 +53,17 @@ int			ft_count_files(t_files **files)
 	return (nb_files);
 }
 
-void		ft_rev_files(t_files **begin_file, int nb_files, int nb_error, 
-						char *path, int arg)
+void		ft_rev_files(t_files **begin_file, int nb_error, char *path,
+							int arg)
 {
 	int			i;
 	int			i2;
 	t_files		*tmp;
 	t_files		*tmp_start;
+	int			nb_files;
 
 	i = -1;
+	nb_files = ft_count_files(begin_file);
 	tmp_start = *begin_file;
 	while (++i < nb_error)
 		tmp_start = tmp_start->next;
@@ -75,7 +76,7 @@ void		ft_rev_files(t_files **begin_file, int nb_files, int nb_error,
 			if (arg)
 				ft_swap_data(&tmp, tmp->name);
 			else
- 				ft_swap_data(&tmp, path);
+				ft_swap_data(&tmp, path);
 			tmp = tmp->next;
 			i2++;
 		}

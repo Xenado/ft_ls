@@ -38,7 +38,7 @@ static int	ft_display_files(t_dir *dir, char **path,
 	return (nb_dir);
 }
 
-void		ft_display_arg(t_files **files, char opts[NB_OPTS + 1])
+void		ft_display_arg(t_files **files, char opts[NB_OPTS + 1], int nb_dir)
 {
 	t_files		*tmp;
 	t_sizes		*sizes;
@@ -60,7 +60,7 @@ void		ft_display_arg(t_files **files, char opts[NB_OPTS + 1])
 			ft_putendl(tmp->name);
 		tmp = tmp->next;
 	}
-	ft_putchar('\n');
+	nb_dir ? ft_putchar('\n') : 0;
 	if (sizes)
 		free(sizes);
 }

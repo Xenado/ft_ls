@@ -41,24 +41,8 @@ static void		ft_perm(t_files *file, char *path)
 	ft_putstr(perm);
 }
 
-void			ft_opt_l(t_files *file, char *path, t_sizes *sizes_max)
+static void		display_size(t_files *file, t_sizes *sizes, t_sizes *sizes_max)
 {
-	t_sizes			*sizes;
-	struct passwd	*pwd;
-	struct group	*grp;
-	ssize_t			nb_car;
-	char			buf[256];
-
-	sizes = get_sizes(file);
-	pwd = ft_get_uid(file);
-	grp = ft_get_gid(file);
-	ft_perm(file, path);
-	ft_putnchar(' ', 1 + sizes_max->size_ln - sizes->size_ln);
-	ft_putnbr((int)file->stat->st_nlink);
-	ft_putchar(' ');
-	ft_putstr(pwd->pw_name);
-	ft_putnchar(' ', 2 + sizes_max->size_uid - sizes->size_uid);
-	ft_putstr(grp->gr_name);
 	if (sizes->size_major)
 	{
 		ft_putnchar(' ', 3 + sizes_max->size_major + sizes_max->size_gid -\
@@ -80,7 +64,13 @@ void			ft_opt_l(t_files *file, char *path, t_sizes *sizes_max)
 					sizes->size_file - sizes->size_gid);
 		ft_putnbr((int)file->stat->st_size);
 	}
-	ft_display_time(file);
+}
+
+static void		display_link(t_files *file, char *path)
+{
+	char	buf[SIZE_MAX_FILE];
+	ssize_t	nb_car;
+
 	if (file->type != 'l')
 		ft_putendl(file->name);
 	else
@@ -91,21 +81,26 @@ void			ft_opt_l(t_files *file, char *path, t_sizes *sizes_max)
 		ft_putstr(" -> ");
 		ft_putendl(buf);
 	}
+}
+
+void			ft_opt_l(t_files *file, char *path, t_sizes *sizes_max)
+{
+	t_sizes			*sizes;
+	struct passwd	*pwd;
+	struct group	*grp;
+
+	sizes = get_sizes(file);
+	pwd = ft_get_uid(file);
+	grp = ft_get_gid(file);
+	ft_perm(file, path);
+	ft_putnchar(' ', 1 + sizes_max->size_ln - sizes->size_ln);
+	ft_putnbr((int)file->stat->st_nlink);
+	ft_putchar(' ');
+	ft_putstr(pwd->pw_name);
+	ft_putnchar(' ', 2 + sizes_max->size_uid - sizes->size_uid);
+	ft_putstr(grp->gr_name);
+	display_size(file, sizes, sizes_max);
+	ft_display_time(file);
+	display_link(file, path);
 	free(sizes);
-}
-
-struct passwd	*ft_get_uid(t_files *file)
-{
-	struct passwd	*bufpwd;
-
-	bufpwd = getpwuid(file->stat->st_uid);
-	return (bufpwd);
-}
-
-struct group	*ft_get_gid(t_files *file)
-{
-	struct group	*bufgrp;
-
-	bufgrp = getgrgid(file->stat->st_gid);
-	return (bufgrp);
 }

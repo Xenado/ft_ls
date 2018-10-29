@@ -31,10 +31,11 @@
 
 # define OPTS "lRart"
 # define NB_OPTS 5
+# define SIZE_MAX_FILE 256
 
 typedef struct		s_files
 {
-	char			name[256];
+	char			name[SIZE_MAX_FILE];
 	char			*error;
 	char			type;
 	struct stat		*stat;
@@ -43,7 +44,7 @@ typedef struct		s_files
 
 typedef struct		s_dir
 {
-	char			name[256];
+	char			name[SIZE_MAX_FILE];
 	char			*path;
 	t_files			*files;
 	struct s_dir	*next;
@@ -75,13 +76,15 @@ void				ft_sort_ascii(t_files **begin_file, char *path, int arg);
 void				ft_sort_by_time(t_files **begin_file, char *path, int arg);
 void				ft_sort_error(t_files **files);
 
-void				ft_organize(t_files **files, char opt[NB_OPTS + 1], char *path, int arg);
+void				ft_organize(t_files **files, char opt[NB_OPTS + 1],
+									char *path, int arg);
 int					ft_count_error(t_files **begin_file);
 int					ft_count_files(t_files **files);
-void				ft_rev_files(t_files **begin_file, int nb_files, int nb_error, 
-								char *path, int arg);
+void				ft_rev_files(t_files **begin_file, int nb_error,
+									char *path, int arg);
 
-void				ft_display_arg(t_files **files, char opts[NB_OPTS + 1]);
+void				ft_display_arg(t_files **files, char opts[NB_OPTS + 1],
+									int nb_dir);
 int					ft_display_dir(t_dir **dir, char opts[NB_OPTS + 1]);
 void				ft_putnchar(char c, int n);
 void				ft_display_time(t_files *file);
@@ -102,7 +105,8 @@ void				ft_opt_l(t_files *file, char *path, t_sizes *sizes_max);
 struct passwd		*ft_get_uid(t_files *file);
 struct group		*ft_get_gid(t_files *file);
 
-int					ft_display_ls(t_dir *dir, char opts[NB_OPTS + 1], int d_name);
-int 				ft_check_dir(t_dir *dir, char opts[NB_OPTS + 1]);
+int					ft_display_ls(t_dir *dir, char opts[NB_OPTS + 1],
+									int d_name);
+int					ft_check_dir(t_dir *dir, char opts[NB_OPTS + 1]);
 
 #endif
