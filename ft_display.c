@@ -54,7 +54,7 @@ void		ft_display_arg(t_files **files, char opts[NB_OPTS + 1])
 			ft_putstr_fd(": ", 2);
 			ft_putendl_fd(tmp->error, 2);
 		}
-		else if (ft_strchr(opts, 'l'))
+		else if (ft_strchr(opts, 'l') && tmp->type != 'd')
 			ft_opt_l(tmp, tmp->name, sizes);
 		else if (tmp->type != 'd')
 			ft_putendl(tmp->name);
@@ -104,7 +104,6 @@ void		ft_display_time(t_files *file)
 	char		*time_st;
 	char		*final_time;
 	time_t		now;
-	char		*str;
 
 	time_st = NULL;
 	final_time = NULL;

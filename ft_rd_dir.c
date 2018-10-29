@@ -34,6 +34,7 @@ t_files		*ft_rd_dir(char *dir_name)
 	struct dirent	*dp;
 	char			*path;
 
+	begin = NULL;
 	path = ft_strdup(dir_name);
 	dirp = opendir(dir_name);
 	if (dirp)
@@ -48,6 +49,7 @@ t_files		*ft_rd_dir(char *dir_name)
 			file->next = ft_new_file(dp->d_name, path);
 			file = file->next;
 		}
+		(void)closedir(dirp);
 	}
 	else
 	{
@@ -55,10 +57,8 @@ t_files		*ft_rd_dir(char *dir_name)
 		ft_putstr_fd(dir_name, 2);
 		ft_putstr_fd(": ", 2);
 		ft_putendl_fd(strerror(errno), 2);
-		exit(1);
 	}
 	if (path)
 		free(path);
-	(void)closedir(dirp);
 	return (begin);
 }

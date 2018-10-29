@@ -37,6 +37,7 @@ static void		ft_perm(t_files *file, char *path)
 		perm[10] = '+';
 	else
 		perm[10] = ' ';
+	acl ? free(acl) : 0;
 	ft_putstr(perm);
 }
 

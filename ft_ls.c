@@ -68,13 +68,14 @@ static void		display_all(t_files **files, char opts[NB_OPTS + 1], int nb_dir)
 	else
 	{
 		ft_organize(files, opts, "", 1);
-		ft_display_arg(files, opts);
+		nb_args != nb_dir ? ft_display_arg(files, opts) : 0;
 		while (nb_dir && tmp)
 		{
 			if (tmp->type == 'd')
 			{
 				dir = ft_new_dir(tmp->name, tmp->name);
-				ft_display_ls(dir, opts, file_name);
+				if (dir->files)
+					ft_display_ls(dir, opts, file_name);
 				free_dir(&dir);
 				nb_dir--;
 			}
